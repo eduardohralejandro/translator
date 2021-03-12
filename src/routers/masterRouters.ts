@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { findAllLinks, findLinkById, postLink, updatLink, deleteLink } from '../controllers/link'
 import { findAllUsers, findUserById, creatUser, deleteUser } from '../controllers/user'
+import { findAllnotes, findNoteById, postNote, deleteNote } from '../controllers/note'
 
 
 const router = Router();
@@ -17,6 +18,12 @@ router.get('/users', findAllUsers);
 router.get('/users/:id',  findUserById);
 router.post('/users',  creatUser);
 router.delete('/users/:id', deleteUser);
+
+// note
+router.get('/article', findAllnotes);
+router.get('/article/:id',  findNoteById);
+router.post('/article',  postNote);
+router.delete('/article/:id', deleteNote);
 
 
 export default router;
