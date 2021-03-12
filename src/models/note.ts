@@ -1,18 +1,16 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
 
 
-class Link {
+class Note {
     @prop({required: true})
-    public title!: string;
+    public noteString!: string;
 
     @prop({ required: true, trim: true })
-    public linkText!: string;
+    public language!: string;
 
     @prop({ required: true, default: Date.now() })
     public createdAt!: Date;
 }
 
 
-export const LinkModel = getModelForClass(Link);
-
-
+export const NoteModel = getModelForClass(Note);
