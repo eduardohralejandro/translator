@@ -23,13 +23,13 @@ export const findLinkById: RequestHandler = async (request, response, next) => {
     const _id = request.params.id;
 
     try {
-        const task = await LinkModel.findOne({ _id });
+        const link = await LinkModel.findOne({ _id });
 
-        if (!task) {
-            return response.status(404).send('no task found with that id');
+        if (!link) {
+            return response.status(404).send('no link found with that id');
         }
 
-        response.send(task);
+        response.send(link);
 
     } catch (error) {
         response.status(500).send(error);
