@@ -3,9 +3,13 @@ config();
 import express from 'express';
 import mongoose from 'mongoose';
 
+import routes from './routers/masterRouters';
+
 
 const app = express();
 app.use(express.json());
+
+app.use(routes);
 
 const port = process.env.PORT || 3000;
 
