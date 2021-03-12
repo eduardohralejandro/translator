@@ -7,11 +7,10 @@ class User {
     public name!: string;
   
     @prop({ unique: true, required: true, trim: true, validate: {
-        validator: (value: string) => !validator.isEmail(value), message: 'Email is  not invalid' }})
+        validator: (value: string) => validator.isEmail(value), message: 'Email is  not invalid' }})
     public email!: string;
 
-    @prop({ unique: true, required: true, trim: true,  validate: {
-        validator: (value: string) =>  value.toLowerCase().includes('password'), message: 'Password cannot contain "password"'}})
+    @prop({ unique: true, required: true, trim: true})
     public password!: string;
 
     @prop({ required: true, default: Date.now() })
