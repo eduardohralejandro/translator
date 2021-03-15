@@ -1,8 +1,17 @@
 import validator from 'validator';
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import bcrypt from 'bcrypt';
+import { prop, getModelForClass, pre, ReturnModelType } from '@typegoose/typegoose';
 
 
-class User {
+
+@pre<User>('save', async function (next) {
+    const user = this;
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, 8);
+    }
+    next();
+})
+class User  {
     @prop({required: true, trim: true})
     public name!: string;
   
@@ -15,9 +24,26 @@ class User {
 
     @prop({ required: true, default: Date.now() })
     public createdAt!: Date;
+
+    public static async findByCredentials(this: ReturnModelType<typeof User>, email: string, password: string)  { 
+   
+    const model = this;
+   
+    const user = await model.findOne({ email })
+   
+        if (!user) {
+            throw new Error('Unable to login');
+        }
+       
+        const isMatch = await bcrypt.compare(password, user.password);
+      
+        if (!isMatch) {
+            throw new Error('Unable to login');
+        }
+       
+        return user;
+      }
 }
 
 
 export const UserModel = getModelForClass(User);
-
-
