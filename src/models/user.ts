@@ -1,7 +1,8 @@
 import validator from 'validator';
 import bcrypt from 'bcrypt';
-import { prop, getModelForClass, pre, ReturnModelType } from '@typegoose/typegoose';
-
+import { prop, getModelForClass, pre, ReturnModelType, modelOptions, Severity } from '@typegoose/typegoose';
+import jwt from 'jsonwebtoken';
+import { ObjectID } from 'mongodb';
 
 
 @pre<User>('save', async function (next) {
@@ -11,8 +12,9 @@ import { prop, getModelForClass, pre, ReturnModelType } from '@typegoose/typegoo
     }
     next();
 })
+@modelOptions({ options: {  allowMixed: Severity.ALLOW, } })
 class User  {
-    @prop({required: true, trim: true})
+    @prop({ trim: true })
     public name!: string;
   
     @prop({ unique: true, required: true, trim: true, validate: {
@@ -21,6 +23,9 @@ class User  {
 
     @prop({ unique: true, required: true, trim: true})
     public password!: string;
+    
+    @prop()
+    public tokens: Array<Object> = [];
 
     @prop({ required: true, default: Date.now() })
     public createdAt!: Date;
@@ -29,7 +34,7 @@ class User  {
    
     const model = this;
    
-    const user = await model.findOne({ email })
+    const user = await model.findOne({ email });
    
         if (!user) {
             throw new Error('Unable to login');
@@ -43,6 +48,22 @@ class User  {
        
         return user;
       }
+
+      public async  generatedAuthToken() {
+
+        const user = this;
+       
+        const token =  jwt.sign({ _id: (user as any)._id.toString() }, 'thisismyasecret');
+        
+        const _id = new ObjectID();
+       
+        user.tokens = user.tokens.concat({ _id, token });
+      
+        await (user as any).save();
+
+        return token;
+      }
+   
 }
 
 

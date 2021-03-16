@@ -39,12 +39,15 @@ export const findUserById: RequestHandler = async (request, response, next) => {
 /**
     create/signup user
 */
-export const creatUser: RequestHandler = async (request, response, next) => {
-    const user = new UserModel(request.body);
-
+export const createUser: RequestHandler = async (request, response, next) => {
     try {
+        const user = new UserModel(request.body);
+        const token = await user.generatedAuthToken();
+        
         await user.save();
-        response.status(200).send(user);
+
+        response.status(201).send({user, token});
+        
     } catch (error) {
         response.status(500).send(error);
     }
@@ -54,10 +57,11 @@ export const creatUser: RequestHandler = async (request, response, next) => {
     login user
 */
 export const loginUser: RequestHandler = async (request, response, next) => {
- 
+   
     try {
         const user = await UserModel.findByCredentials(request.body.email, request.body.password);
-        response.status(200).send(user);
+        const token = await user.generatedAuthToken();        
+        response.status(200).send({user, token});
     } catch (error) {
         response.status(400).send(error);
     }

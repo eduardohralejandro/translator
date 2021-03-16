@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { findAllLinks, findLinkById, postLink, updatLink, deleteLink } from '../controllers/link'
-import { findAllUsers, findUserById, creatUser, deleteUser, loginUser } from '../controllers/user'
+import { findAllUsers, findUserById, createUser, deleteUser, loginUser } from '../controllers/user'
 import { findAllnotes, findNoteById, postNote, deleteNote } from '../controllers/note'
 
 
@@ -14,10 +14,10 @@ router.put('/links/:id', updatLink);
 router.delete('/links/:id', deleteLink);
 
 // user
+router.post('/users/create',  createUser);
+router.post('/users/login', loginUser);
 router.get('/users', findAllUsers);
 router.get('/users/:id',  findUserById);
-router.post('/users',  creatUser);
-router.post('/users/login', loginUser);
 router.delete('/users/:id', deleteUser);
 
 // note
