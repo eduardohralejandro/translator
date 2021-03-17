@@ -49,6 +49,16 @@ class User  {
         return user;
       }
 
+      public async toJSON() {
+        const user = this;
+        const userObject = (user as any).toObject();
+        
+        delete userObject.password
+        delete userObject.tokens
+
+        return userObject;
+    }
+
       public async  generatedAuthToken() {
 
         const user = this;
