@@ -1,8 +1,9 @@
 import { Router } from 'express';
 
 import { findAllLinks, findLinkById, postLink, updatLink, deleteLink } from '../controllers/link'
-import { findAllUsers, findUserById, createUser, deleteUser, loginUser } from '../controllers/user'
+import { findAllUsers, findUserById, createUser, deleteUser, loginUser, logoutUser } from '../controllers/user'
 import { findAllnotes, findNoteById, postNote, deleteNote } from '../controllers/note'
+import auth from '../middleware/auth';
 
 
 const router = Router();
@@ -16,9 +17,10 @@ router.delete('/links/:id', deleteLink);
 // user
 router.post('/users/create',  createUser);
 router.post('/users/login', loginUser);
-router.get('/users', findAllUsers);
+router.post('/users/logout', auth, logoutUser);
+router.get('/users/profile', auth, findAllUsers);
 router.get('/users/:id',  findUserById);
-router.delete('/users/:id', deleteUser);
+router.delete('/users/:id', auth,  deleteUser);
 
 // note
 router.get('/article', findAllnotes);

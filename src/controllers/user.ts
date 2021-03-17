@@ -4,15 +4,27 @@ import { UserModel } from '../models/user';
 
 
 /**
-    find all users.
+    find user profile.
 */
 export const findAllUsers: RequestHandler = async (request, response, next) => {
-    try {
-       const users = await UserModel.find({});
-       response.status(200).send(users);
-    } catch (error) {
-        response.status(500).send(error);
-    }
+    response.send((request as any).user);
+}
+
+
+/**
+    logout user
+*/
+export const logoutUser: RequestHandler = async (request, response, next) => {
+  try {
+      (request as any).user.tokens = (request as any).user.tokens.filter((token: any) => {
+        return token.token !== (request as any).token
+      })
+
+      (request as any).user.save();
+      response.send();
+  } catch (error) {
+      response.status(500).send();
+  }
 }
 
 /**
@@ -45,8 +57,9 @@ export const createUser: RequestHandler = async (request, response, next) => {
         const token = await user.generatedAuthToken();
         
         await user.save();
-
-        response.status(201).send({user, token});
+       
+        const info = await user.toJSON();
+        response.status(201).send({user: info, token});
         
     } catch (error) {
         response.status(500).send(error);
@@ -57,11 +70,14 @@ export const createUser: RequestHandler = async (request, response, next) => {
     login user
 */
 export const loginUser: RequestHandler = async (request, response, next) => {
-   
+  
     try {
         const user = await UserModel.findByCredentials(request.body.email, request.body.password);
-        const token = await user.generatedAuthToken();        
-        response.status(200).send({user, token});
+        const token = await user.generatedAuthToken();  
+        const info = await user.toJSON();      
+
+        response.status(200).send({ user: info, token});
+        
     } catch (error) {
         response.status(400).send(error);
     }
