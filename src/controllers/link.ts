@@ -8,8 +8,9 @@ import { LinkModel } from '../models/link';
 */
 export const findAllLinks: RequestHandler = async (request, response, next) => {
     try {
-       const links = await LinkModel.find({});
-       response.status(200).send(links);
+       await (request as any).user?.populate({ path: 'links', model: LinkModel }).execPopulate();
+       response.status(200).send((request as any).user.links);
+
     } catch (error) {
         response.status(500).send(error);
     }
@@ -23,10 +24,11 @@ export const findLinkById: RequestHandler = async (request, response, next) => {
     const _id = request.params.id;
 
     try {
-        const link = await LinkModel.findOne({ _id });
+ 
+        const link = await LinkModel.findOne({_id, owner: (request as any).user._id });
 
         if (!link) {
-            return response.status(404).send('no link found with that id');
+            return response.status(404).send();
         }
 
         response.send(link);
@@ -40,7 +42,11 @@ export const findLinkById: RequestHandler = async (request, response, next) => {
     post link
 */
 export const postLink: RequestHandler = async (request, response, next) => {
-    const link = new LinkModel(request.body);
+  
+    const link =  new LinkModel({
+        ...request.body,
+        owner: (request as any).user._id
+    });
 
     try {
         await link.save();
@@ -58,8 +64,8 @@ export const updatLink: RequestHandler = async (request, response, next) => {
 
     try {
 
-      const foundLink = await LinkModel.findOne({ _id });
-   
+      const foundLink = await LinkModel.findById({ _id, owner: (request as any).user._id});
+
       if (!foundLink) {
           throw new Error('This link does not exist');
       }
@@ -79,7 +85,7 @@ export const updatLink: RequestHandler = async (request, response, next) => {
 */
 export const deleteLink: RequestHandler = async (request, response, next) => {
     try {
-        const link = await LinkModel.findOneAndDelete({ _id: request.params.id });
+        const link = await LinkModel.findOneAndDelete({ _id: request.params.id, owner: (request as any).user._id });
 
         if (!link) {
             response.status(404).send('not link found');

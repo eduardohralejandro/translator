@@ -1,4 +1,5 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
+import * as mongoose from 'mongoose';
 
 
 class Link {
@@ -10,6 +11,9 @@ class Link {
 
     @prop({ required: true, default: Date.now() })
     public createdAt!: Date;
+
+    @prop({ ref: () => 'UserModel', type: mongoose.Schema.Types.ObjectId })
+    public owner!: mongoose.Schema.Types.ObjectId;
 }
 
 

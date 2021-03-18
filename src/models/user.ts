@@ -1,8 +1,10 @@
 import validator from 'validator';
 import bcrypt from 'bcrypt';
-import { prop, getModelForClass, pre, ReturnModelType, modelOptions, Severity } from '@typegoose/typegoose';
+import { prop, getModelForClass, pre, ReturnModelType, modelOptions, Severity, Ref } from '@typegoose/typegoose';
 import jwt from 'jsonwebtoken';
+import * as mongoose from 'mongoose';
 import { ObjectID } from 'mongodb';
+import { LinkModel } from '../models/link';
 
 
 @pre<User>('save', async function (next) {
@@ -73,6 +75,12 @@ class User  {
 
         return token;
       }
+
+    @prop({ 
+        ref: () => 'LinkModel', type: mongoose.Schema.Types.ObjectId ,       
+        foreignField: 'owner',
+        localField: '_id' })
+    public links!: Ref<typeof LinkModel>
    
 }
 
