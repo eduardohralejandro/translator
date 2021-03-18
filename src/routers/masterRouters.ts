@@ -8,18 +8,18 @@ import auth from '../middleware/auth';
 
 const router = Router();
 // link
-router.get('/links', findAllLinks);
-router.get('/links/:id',  findLinkById);
-router.post('/links',  postLink);
-router.put('/links/:id', updatLink);
-router.delete('/links/:id', deleteLink);
+router.get('/links', auth, findAllLinks);
+router.get('/links/:id', auth,  findLinkById);
+router.post('/links', auth,  postLink);
+router.put('/links/:id', auth, updatLink);
+router.delete('/links/:id', auth, deleteLink);
 
 // user
 router.post('/users/create',  createUser);
 router.post('/users/login', loginUser);
 router.post('/users/logout', auth, logoutUser);
 router.get('/users/profile', auth, findAllUsers);
-router.get('/users/:id',  findUserById);
+router.get('/users/:id', auth, findUserById);
 router.delete('/users/:id', auth,  deleteUser);
 
 // note
