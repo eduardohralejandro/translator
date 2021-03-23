@@ -15,9 +15,9 @@ router.put('/links/:id', auth, updatLink);
 router.delete('/links/:id', auth, deleteLink);
 
 // user
-router.post('/users/create',  createUser);
-router.post('/users/login', loginUser);
-router.post('/users/logout', auth, logoutUser);
+router.post('/auth/create',  createUser);
+router.post('/auth/login', loginUser);
+router.post('/auth/logout', auth, logoutUser);
 router.get('/users/profile', auth, findAllUsers);
 router.get('/users/:id', auth, findUserById);
 router.delete('/users/:id', auth,  deleteUser);
