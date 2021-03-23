@@ -5,7 +5,8 @@ module.exports = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -22,6 +23,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.jsx', '.js'],
   },
   devServer: {
-    contentBase: path.resolve(__dirname, './dist')
+    contentBase: path.resolve(__dirname, './dist'),
+    historyApiFallback: true,
   }
 }
