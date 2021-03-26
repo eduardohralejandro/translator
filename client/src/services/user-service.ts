@@ -5,19 +5,19 @@ const API_URL = 'http://localhost:3000/api';
 
 
 class UserService {
-  getPublicContent() {
+  getPublicContent(): Promise<void> {
     return axios.get(API_URL + '/links');
   }
 
-  getUserBoard() {
+  getUserBoard(): Promise<void> {
     return axios.get(API_URL + 'user', { headers: authHeader() });
   }
 
-  getModeratorBoard() {
+  getModeratorBoard(): Promise<void> {
     return axios.get(API_URL + 'mod', { headers: authHeader() });
   }
 
-  getAdminBoard() {
+  getAdminBoard(): Promise<void> {
     return axios.get(API_URL + 'admin', { headers: authHeader() });
   }
 }
