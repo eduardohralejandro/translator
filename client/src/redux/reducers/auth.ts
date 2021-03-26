@@ -1,48 +1,45 @@
-import {
-    REGISTER_SUCCESS,
-    REGISTER_FAIL,
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOGOUT,
-  } from "../constants/auth";
-  
-  const user = JSON.parse(localStorage.getItem("user") as string);
+import * as actionTypes from '../constants/auth';
+import {UserInitialStateI, Action} from '../types/auth';  
+
+
+  const user = JSON.parse(localStorage.getItem('user') as string);
   
   const initialState = user
-    ? { isLoggedIn: true, user }
-    : { isLoggedIn: false, user: null };
+                      ? { isLoggedIn: true, user, message: '' }
+                      : { isLoggedIn: false, user: null, message: '' };
   
-  export default function (state = initialState, action: any) {
+  export default (state: UserInitialStateI = initialState, action: Action): UserInitialStateI => {
+    
     const { type, payload } = action;
-  
+
     switch (type) {
-      case REGISTER_SUCCESS:
+      case actionTypes.REGISTER_SUCCESS:
         return {
           ...state,
           isLoggedIn: true,
         };
-      case REGISTER_FAIL:
+      case actionTypes.REGISTER_FAIL:
         return {
           ...state,
           isLoggedIn: false,
         };
-      case LOGIN_SUCCESS:
+      case actionTypes.LOGIN_SUCCESS:
         return {
           ...state,
           isLoggedIn: true,
-          user: payload.user,
+          payload: payload.user,
         };
-      case LOGIN_FAIL:
+      case actionTypes.LOGIN_FAIL:
         return {
           ...state,
           isLoggedIn: false,
-          user: null,
+          payload: null,
         };
-      case LOGOUT:
+      case actionTypes.LOGOUT:
         return {
           ...state,
           isLoggedIn: false,
-          user: null,
+          payload: null,
         };
       default:
         return state;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { register } from '../redux/actions/auth'
+import { register } from '../../redux/actions/auth'
 
 
 const Register = (props: any) => {
@@ -9,7 +9,7 @@ const Register = (props: any) => {
     const registerState = useSelector((state: any) => state);
       
     const actionRegister = () => {
-      const user = {email: '', password: '', name: ''};
+      const user = {email: 'epale@gmail.com', password: '123456789', name: 'eduuuuu'};
       dispatch(register(user));
     }
     

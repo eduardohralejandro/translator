@@ -17,7 +17,7 @@ class AuthService {
         localStorage.removeItem('user');
     }
 
-    async register(name: string, email: string, password: string) {
+    async register(name: string | undefined, email: string, password: string) {
        const response = await axios.post(`${API_URL}/create`, {
             name,
             email,

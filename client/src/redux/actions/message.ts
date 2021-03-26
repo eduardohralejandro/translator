@@ -1,11 +1,12 @@
-import { SET_MESSAGE, CLEAR_MESSAGE } from "../constants/auth";
+import * as actionTypes from '../constants/auth';
+import {Action} from '../types/message';
 
 
-export const setMessage = (message: string) => ({
-  type: SET_MESSAGE,
+export const setMessage = (message: string): Action => ({
+  type: actionTypes.SET_MESSAGE,
   payload: message,
 });
 
-export const clearMessage = () => ({
-  type: CLEAR_MESSAGE,
+export const clearMessage = (): Action => ({
+  type: actionTypes.CLEAR_MESSAGE,
 });
